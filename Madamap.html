@@ -103,6 +103,11 @@
    <script src="https://unpkg.com/leaflet@1.9.1/dist/leaflet.js" integrity="sha256-NDI0K41gVbWqfkkaHj15IzU7PtMoelkzyKp8TOaFQ3s=" crossorigin=""></script>
    <script src="js/ActiveLayers.js"></script>
 
+   <script
+   type="text/javascript"
+    src="https://unpkg.com/leaflet-contour@1.0.0/dist/leaflet-contour.min.js"
+  ></script>
+
    <script src="js/SelectLayers.js"></script>
    <script src="js/L.Control.Layers.Tree.js"></script>
 
@@ -125,11 +130,10 @@
    <script src="https://unpkg.com/georaster-layer-for-leaflet@0.4.1/georaster-layer-for-leaflet.bundle.js"></script>
    <script src="https://unpkg.com/georaster-layer-for-leaflet@0.4.1/georaster-layer-for-leaflet.js"></script>
    <script src="https://unpkg.com/georaster-layer-for-leaflet@0.4.1/georaster.browser.bundle.js"></script>
- 
-   <script src="https://unpkg.com/georaster-layer-for-leaflet@0.4.1/georaster-layer-for-leaflet.browserify.min.js"></script>
-   <script src="https://unpkg.com/georaster-layer-for-leaflet@0.4.1/georaster-layer-for-leaflet.bundle.js"></script>
-   <script src="https://unpkg.com/georaster-layer-for-leaflet@0.4.1/georaster-layer-for-leaflet.js"></script>
-   <script src="https://unpkg.com/georaster-layer-for-leaflet@0.4.1/georaster.browser.bundle.js"></script>
+
+  
+   
+
  
 
 
@@ -305,8 +309,10 @@ attribution: mbAttr
       var heatmapLayer3 = new HeatmapOverlay(cfg3);
        heatmapLayer3.setData(testData[2]);
 
-      var heatmapLayer2 = new HeatmapOverlay(cfg2);
-       heatmapLayer2.setData(testData[1]);
+      /*var heatmapLayer2 = new HeatmapOverlay(cfg2);
+       heatmapLayer2.setData(testData[1]);*/
+
+       console.log(heatmapLayer2);
 
 
 
@@ -400,7 +406,7 @@ console.log(display_val);
       var baseTree =
              [
                 {
-                    label: 'BASEMAPE',
+                    label: 'BASEMAP',
                     //layer: osmbaseLayer,
                     children: [
                         {label: 'openStreeMap', layer: osmbaseLayer, name: 'OpenStreeMap'},

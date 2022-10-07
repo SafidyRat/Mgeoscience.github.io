@@ -18,8 +18,12 @@
       crossorigin=""
     ></script>
     <script
-      type="text/javascript"
-      src="https://unpkg.com/leaflet-contour"
+     type="text/javascript"
+      src="https://unpkg.com/leaflet-contour@1.0.0/dist/leaflet-contour.min.js"
+    ></script>
+
+    <script
+      src="js/gridding/gridding.js"
     ></script>
 
 
@@ -39,7 +43,7 @@
 
     
     ////read data
-    var file="./geoid/EGM2008GridData.txt";
+    var file="./geoid/ascii _raster_file/EGM2008Res.asc";
     var reader  = new XMLHttpRequest()|| new ActiveXObject('MSXML2.XMLHTTP');
     var datacorr=[];
     var datacor=[];
@@ -72,39 +76,62 @@ function storedata (){
 
    datacor=datacorr;
 
-   for(let j=6; j<=datacor.length;j++)
+   for(let j=6; j<=datacor.length-3;j++)
   {
     sp = [];
     tosplit = String(datacor[j]); 
+   
 
+  
     sp = tosplit.split(" ");
-    sp= sp.slice(1);
+    sp= sp.slice(0);
+    //sp=sp.push("");
+   
 
- 
+
+
+
+
+
+   
+
+    sp=sp.map(s => parseFloat(s));
+
+    sp[0]=null;
+    sp[sp.length]=null;
+
+    if(j==6){
+      sp=sp.map(s=>null);
+    }
+    if(j==datacor.length-3){
+      sp=sp.map(s=>null);
+    }
+
+   
+   
 
     //firstFunction();
 
     intensity.push(sp);
     
-
-
   }
+
+
 
 
 
   var s=0;
 
-  for(let j=0; j<=datacor.length-6;j++){
+  for(let j=0; j<=300;j++){
     ygridl=[];
     xgridl=[];
     
-    for(let i=0; i<= 210;i++)
+    for(let i=0; i<= 300;i++)
     {
-      xgridl[i]=42.3958333+0.041666*(i);
-    
+      xgridl[i]=42.3958 +0.4861111*(i);
       
-      ygridl[i]=(-1)*11.437499+(-0.04166)*s;
-
+      ygridl[i]=(-1)*11.4375+(-0.497311)*s;
+     
     }
     s=s+1;
 
@@ -114,14 +141,30 @@ function storedata (){
 
  
 }
+console.log( intensity);
+console.log( xgrid[17]);
+
+
+
+
+
+
 //////////////////////////////////////////////////////////////////////////////////////////allllllllllllll
-var data= {
+const data= {
 x: xgrid,
 y: ygrid,
 z: intensity,
 };
 
-console.log(data.z[0]);
+console.log( data.z[20]);
+console.log( data.x[20]);
+/*
+let a = document.createElement('a');
+a.href = "data:application/octet-stream,"+encodeURIComponent(data.x);
+a.download = 'abc.txt';
+a.click();*/
+
+//console.log(data.z[0]);
 
 
 const colors = [
@@ -312,6 +355,8 @@ const colors = [
 
       var map = L.map("mapid").setView([-18, 44], 6);
 
+ 
+
       L.tileLayer(
         "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
         {
@@ -325,34 +370,39 @@ const colors = [
         }
       ).addTo(map);
 
+     
+
       L.contour(data, {
-        thresholds:10000,
+        thresholds:100,
         style: (feature) => {
           return {
-            //color: getColor(feature.geometry.value, -10, 50, colors),
-            opacity: 50,
-            //fillOpacity: 10,
+            color: getColor(feature.geometry.value, -29,10, colors),
+            opacity: 0.01,
+            fillOpacity: 0.05,
           };
         },
         onEachFeature: onEachContour(),
       }).addTo(map);
 
+
+  
+
       function onEachContour() {
         return function onEachFeature(feature, layer) {
-          console.log(feature.value);
+          //console.log(feature.value);
       
           layer.bindPopup(
             `<table><tbody><tr><td>${feature.value}°C</td></tr></tbody></table>`
           );
         };
+
+      
+
       }
 
+     
+
 ////////////////////////////////////////////
-
-
-
-
-
 
 
   

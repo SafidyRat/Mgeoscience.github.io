@@ -1,4 +1,4 @@
-var files=[ "./geoid/corgeoid.txt", "./geoid/EGM0825min2.txt","./geoid/wgmbouguer.txt", "./geoid/ascii _raster_file/ascigrid.asc"];
+var files=[ "./geoid/corgeoid.txt", "./geoid/EGM0825min2.txt","./geoid/wgmbouguer.txt", "./geoid/ascii _raster_file/EGM2008Res.asc"];
 
 
 var datacor=[];
@@ -144,25 +144,18 @@ if(i==3){
     
   }
 
-  console.log(intensity);
-
   //////genrate coordinate drid
   var s=0;
 
-  for(let j=0; j<=500;j++){
+  for(let j=0; j<=300;j++){
     ygridl=[];
     xgridl=[];
     
-    for(let i=0; i<=500;i++)
+    for(let i=0; i<= 300;i++)
     {
-      /*xgridl[i]=42.3958 +0.4861111*(i);
+      xgridl[i]=42.3958 +0.4861111*(i);
       
-      ygridl[i]=(-1)*11.4375+(-0.497311)*s;*/
-
-
-      xgridl[i]=42.3958 +0.041666*(i);
-      
-      ygridl[i]=(-1)*11.4375+(-0.041666)*s;
+      ygridl[i]=(-1)*11.4375+(-0.497311)*s;
      
     }
     s=s+1;
@@ -372,12 +365,12 @@ const data= {
 
   //////Layer variable
   heatmapLayer2= L.contour(data, {
-    thresholds:200,
+    thresholds:100,
     style: (feature) => {
       return {
-        color: getColor(feature.geometry.value, -31,11, colors),
-        opacity: 0.04,
-        fillOpacity: 0.01,
+        color: getColor(feature.geometry.value, -29,10, colors),
+        opacity: 0.07,
+        fillOpacity: 0.03,
       };
     },
     onEachFeature: onEachContour(),
@@ -388,7 +381,7 @@ const data= {
       //console.log(feature.value);
   
       layer.bindPopup(
-        `<table><tbody><tr><td>${feature.value} m</td></tr></tbody></table>`
+        `<table><tbody><tr><td>${feature.value}°C</td></tr></tbody></table>`
       );
     };
 
