@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Leaflet Contour</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+      crossorigin=""
+    />
+    <link   rel="stylesheet" href= "css/L.Control.Range"  />
+
+    <script
+      src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/leaflet-contour"
+    ></script>
+
+    <script
+    src="  ./js/L.Control.Range.js"
+  ></script>
+
+  <script src="js/L.Control.Opacity.js"></script>
+  <link href="css/L.Control.Opacity.css" rel="stylesheet" />
+
+  
+
+
+  
+
+  
+    <!--<script
+      type="text/javascript"
+      src="../../dist/leaflet-contour.min.js"
+    ></script>-->
+  </head>
+  <body>
+    <div id="mapid" style="width: 80vw; height: 80vh"></div>
+    <script>
+
+ 
+
+    
+    ////read data
+    var file="./geoid/ascii _raster_file/ascigrid.asc";
+    var reader  = new XMLHttpRequest()|| new ActiveXObject('MSXML2.XMLHTTP');
+    var datacorr=[];
+    var datacor=[];
+
+  var intensity=[];
+  var xgrid=[];
+  var ygrid=[];
+  var xgridl=[];
+  var ygridl=[];
+
+
+function loadcor(){
+
+     tosplit=null;
+     sp=null;
+
+    reader.open("get",file, true);
+    reader.onreadystatechange=  storedata;
+    reader.send(null);
+   
+   }
+
+   loadcor();
+function storedata (){
+   if(reader.readyState==4) {
+        
+   //READ Correction DATA
+   datacor=null;
+   datacorr=reader.responseText.split("\n");
+
+   datacor=datacorr;
+
+   for(let j=6; j<=datacor.length-3;j++)
+  {
+    sp = [];
+    tosplit = String(datacor[j]); 
+
+    sp = tosplit.split(" ");
+    //sp= sp.slice(0);
+
+    sp=sp.map(s=>parseFloat(s));
+    sp[0]=null;
+
+    if(j==6){
+
+      sp=sp.map(s=>null)
+    }
+
+    if(j==datacor.length-2){
+
+   sp=sp.map(s=>null)
+   }
+    sp[sp.length-1]=null;
+
+    //firstFunction();
+
+    intensity.push(sp);
+    
+
+
+  }
+
+  //console.log(intensity);
+
+
+
+  var s=0;
+
+  for(let j=0; j<=800;j++){
+    ygridl=[];
+    xgridl=[];
+    
+    for(let i=0; i<= 800;i++)
+    {
+      xgridl[i]=42.3958333+0.041666*(i);
+    
+      
+      ygridl[i]=(-1)*11.437499+(-0.04166)*s;
+
+    }
+    s=s+1;
+
+    ygrid.push(ygridl);
+
+    xgrid.push(xgridl);
+
+ 
+}
+//////////////////////////////////////////////////////////////////////////////////////////allllllllllllll
+var data= {
+x: xgrid,
+y: ygrid,
+z: intensity,
+};
+
+
+
+
+const colors = [
+        {
+          color: "#053061",
+          point: 0,
+        },
+        {
+          color: "#09386d",
+          point: 0.032258064516129,
+        },
+        {
+          color: "#134c87",
+          point: 0.0645161290322581,
+        },
+        {
+          color: "#1d5fa2",
+          point: 0.0967741935483871,
+        },
+        {
+          color: "#276eb0",
+          point: 0.129032258064516,
+        },
+        {
+          color: "#337eb8",
+          point: 0.161290322580645,
+        },
+        {
+          color: "#3f8ec0",
+          point: 0.193548387096774,
+        },
+        {
+          color: "#569fc9",
+          point: 0.225806451612903,
+        },
+        {
+          color: "#71b0d3",
+          point: 0.258064516129032,
+        },
+        {
+          color: "#8dc2dc",
+          point: 0.290322580645161,
+        },
+        {
+          color: "#a2cde3",
+          point: 0.32258064516129,
+        },
+        {
+          color: "#b8d8e9",
+          point: 0.354838709677419,
+        },
+        {
+          color: "#cfe4ef",
+          point: 0.387096774193548,
+        },
+        {
+          color: "#ddebf2",
+          point: 0.419354838709677,
+        },
+        {
+          color: "#eaf1f5",
+          point: 0.451612903225806,
+        },
+        {
+          color: "#f7f6f6",
+          point: 0.483870967741936,
+        },
+        {
+          color: "#f9eee7",
+          point: 0.516129032258065,
+        },
+        {
+          color: "#fbe4d6",
+          point: 0.548387096774194,
+        },
+        {
+          color: "#fdd9c4",
+          point: 0.580645161290323,
+        },
+        {
+          color: "#f9c6ac",
+          point: 0.612903225806452,
+        },
+        {
+          color: "#f6b394",
+          point: 0.645161290322581,
+        },
+        {
+          color: "#f2a17f",
+          point: 0.67741935483871,
+        },
+        {
+          color: "#e8896c",
+          point: 0.709677419354839,
+        },
+        {
+          color: "#dd7059",
+          point: 0.741935483870968,
+        },
+        {
+          color: "#d25849",
+          point: 0.774193548387097,
+        },
+        {
+          color: "#c53e3d",
+          point: 0.806451612903226,
+        },
+        {
+          color: "#b82531",
+          point: 0.838709677419355,
+        },
+        {
+          color: "#a81529",
+          point: 0.870967741935484,
+        },
+        {
+          color: "#8d0c25",
+          point: 0.903225806451613,
+        },
+        {
+          color: "#730421",
+          point: 0.935483870967742,
+        },
+        {
+          color: "#67001f",
+          point: 1,
+        },
+      ];
+      function getColor(value, min, max, colors) {
+        function hex(c) {
+          var s = "0123456789abcdef";
+          var i = parseInt(c, 10);
+          if (i === 0 || isNaN(c)) return "00";
+          i = Math.round(Math.min(Math.max(0, i), 255));
+          return s.charAt((i - (i % 16)) / 16) + s.charAt(i % 16);
+        }
+        function trim(s) {
+          return s.charAt(0) === "#" ? s.substring(1, 7) : s;
+        }
+        function convertToRGB(hex) {
+          var color = [];
+          color[0] = parseInt(trim(hex).substring(0, 2), 16);
+          color[1] = parseInt(trim(hex).substring(2, 4), 16);
+          color[2] = parseInt(trim(hex).substring(4, 6), 16);
+          return color;
+        }
+        function convertToHex(rgb) {
+          return hex(rgb[0]) + hex(rgb[1]) + hex(rgb[2]);
+        }
+
+        if (value === null || isNaN(value)) {
+          return "#ffffff";
+        }
+        if (value > max) {
+          return colors[colors.length - 1].color;
+        }
+        if (value < min) {
+          return colors[0].color;
+        }
+        var loc = (value - min) / (max - min);
+        if (loc < 0 || loc > 1) {
+          return "#fff";
+        } else {
+          var index = 0;
+          for (var i = 0; i < colors.length - 1; i++) {
+            if (loc >= colors[i].point && loc <= colors[i + 1].point) {
+              index = i;
+            }
+          }
+          var color1 = convertToRGB(colors[index].color);
+          var color2 = convertToRGB(colors[index + 1].color);
+
+          var f =
+            (loc - colors[index].point) /
+            (colors[index + 1].point - colors[index].point);
+          var rgb = [
+            color1[0] + (color2[0] - color1[0]) * f,
+            color1[1] + (color2[1] - color1[1]) * f,
+            color1[2] + (color2[2] - color1[2]) * f,
+          ];
+
+          return `#${convertToHex(rgb)}`;
+        }
+      }
+
+
+
+
+      var map = L.map("mapid").setView([-18, 44], 6);
+
+      L.tileLayer(
+        "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+        {
+          maxZoom: 18,
+          attribution:
+            'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+          id: "mapbox/streets-v11",
+          tileSize: 512,
+          zoomOffset: -1,
+        }
+      ).addTo(map);
+
+      function styles() {
+                return {
+                    //fillColor: rgb(0,176,80),
+                    weight: 2,
+                    opacity: 1,
+                    //color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.7
+                };
+            }
+      
+      var contours= L.contour(data, {
+        thresholds:100,
+        
+        
+        style: (feature) => {
+          return {
+            color: getColor(feature.geometry.value, -31, 11, colors),
+            opacity: getOpacity,
+            //fillOpacity: 0.5,
+          };
+        },
+        
+        onEachFeature: onEachContour(),
+
+      
+      
+      });
+
+
+      contours.addTo(map);
+
+      function onEachContour() {
+        return function onEachFeature(feature, layer) {
+          //console.log(feature.value);
+
+          //layer.opacity=50;
+          //layer.fillOpacity=50;
+
+          //layer.options.fillOpacity=0;
+
+          layer.bindPopup(
+            `<table><tbody><tr><td>${feature.value}°C</td></tr></tbody></table>`
+          );
+        };
+      }
+
+      var command = L.control({position: 'topleft'});
+
+      /*command.onAdd = function (map) {
+    var div = L.DomUtil.create('div');
+    div.innerHTML = `
+    
+    <div >
+      
+      <input type="file" id="file-selector" accept=".zip" style="display: none;" />
+      <input type="button" class="styled" value="Load ziped shapefile" onclick="document.getElementById('file-selector').click();" /><br><br>
+
+      <input type="file" id="file-selector2" accept=".tif" style="display: none;" />
+      <input type="button" class="styled" value="Load raster file" onclick="document.getElementById('file-selector2').click();" />
+
+      <input type="range" id="rngVolume" min="0" max="1" step=".01" value=".5"/>
+
+ 
+    </div>`; 
+    return div;
+
+    
+    document.getElementById("command1").checked = true;
+        
+};
+command.addTo(map);*/
+
+//console.log(contours.options.style);
+
+var slider = L.control.range({
+    position: 'topleft',
+    min: 15,
+    max: 300,
+    value: 15,
+    step: 0.1,
+    orient: 'vertical',
+    iconClass: 'leaflet-range-icon',
+    icon: true
+});
+
+var i=0;
+var n=0;
+var myfunction=[];
+
+function onEachContour(value) {
+        return function onEachFeature(feature, layer) {
+          //console.log(feature.value);
+          layer.opacity=value;
+          layer.fillOpacity=value;
+          layer.bindPopup(
+            `<table><tbody><tr><td>${feature.value}°C</td></tr></tbody></table>`
+          );
+        };
+      }
+
+
+slider.on('input change', function(e) {
+
+  var year =e.value;
+
+
+
+      contours.eachLayer(function (layer) {
+
+          // don't return layer.setStyle-- just call it. 
+          // the setStyle method expects an object. 
+          // we can use another function to build and return that object, if we feed it the 'year' value. 
+
+          layer.setStyle(getStyle(year));
+          //layer.setStyle({fillColor: "#ff0000", fillOpacity: year});
+      });
+
+ 
+   
+});
+
+function getStyle(y){
+//fillColor: getColor(y),
+  {return {fillColor: getColor(y),
+           opacity:getOpacity(y)}}
+    /*if (y >= 100) {return {fillColor: "#ff0000", fillOpacity: 10}}
+    if (y <= 10) {return {fillColor: "#ff0000", fillOpacity: 0}}
+    if (y>10 || y< 100) {return {fillColor: "#ff0000", fillOpacity: 1}}
+    else {return {fillOpacity: 0}}*/
+}
+
+function getColor(d) {
+    return d > 1000 ? '#800026' :
+           d > 500  ? '#BD0026' :
+           d > 200  ? '#E31A1C' :
+           d > 100  ? '#FC4E2A' :
+           d > 50   ? '#FD8D3C' :
+           d > 20   ? '#FEB24C' :
+           d > 10   ? '#FED976' :
+                      '#FFEDA0';
+}
+
+
+
+/*function getStyle(y){
+
+  if (y <= 10) {return {fillColor: "#ff0000", fillOpacity: 10}}
+ 
+  else {return { fillColor: "#ff0000",fillOpacity: 50}}
+
+     
+}*/
+
+
+function ctr(value){
+
+  contours= L.contour(data, {
+        thresholds:100,
+        style: (feature) => {
+          return {
+            color: getColor(feature.geometry.value, -31, 11, colors),
+            //opacity: e.value,
+            //fillOpacity: e.value,
+          };
+        }, 
+        onEachFeature: onEachContour(value),
+      }).addTo(map);
+
+}
+
+map.addControl(slider);
+
+
+////////////////////////////////////////////
+
+const m_color = new L.tileLayer('https://tile.mierune.co.jp/mierune/{z}/{x}/{y}.png', {
+    attribution:
+        "Maptiles by <a href='http://mierune.co.jp/' target='_blank'>MIERUNE</a>, under CC BY. Data by <a href='http://osm.org/copyright' target='_blank'>OpenStreetMap</a> contributors, under ODbL.",
+});
+
+//MIERUNE MONO
+const m_mono = new L.tileLayer('https://tile.mierune.co.jp/mierune_mono/{z}/{x}/{y}.png', {
+    attribution:
+        "Maptiles by <a href='http://mierune.co.jp/' target='_blank'>MIERUNE</a>, under CC BY. Data by <a href='http://osm.org/copyright' target='_blank'>OpenStreetMap</a> contributors, under ODbL.",
+});
+
+//OSM
+const o_std = new L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+});
+
+//GSI Pale
+const t_pale = new L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
+    attribution:
+        "<a href='http://www.gsi.go.jp/kikakuchousei/kikakuchousei40182.html' target='_blank'>国土地理院</a>",
+});
+
+//GSI Ort
+const t_ort = new L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/ort/{z}/{x}/{y}.jpg', {
+    attribution:
+        "<a href='http://www.gsi.go.jp/kikakuchousei/kikakuchousei40182.html' target='_blank'>国土地理院</a>",
+});
+
+//MAP
+
+
+//BaseLayer
+const Map_BaseLayer = {
+    'MIERUNE Color': m_color,
+    'MIERUNE MONO': m_mono,
+};
+
+//AddLayer
+const Map_AddLayer = {
+    'OSM': o_std,
+    'GSI Pale': t_pale,
+    'GSI Ort': t_ort,
+    'data': contours,
+};
+
+//LayerControl
+L.control
+    .layers(Map_BaseLayer, Map_AddLayer, {
+        collapsed: false,
+    })
+    .addTo(map);
+
+//OpacityControl
+L.control
+    .opacity(Map_AddLayer, {
+        label: 'Layers Opacity',
+    })
+    .addTo(map);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    
+ 
+    </script>
+ 
+  </body>
+</html>
